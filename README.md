@@ -20,8 +20,7 @@ Feature Engineering
 Machine Learning Model
    ↓
 Evaluation
-   ↓
-Interactive Dashboard
+
 
 ```
 ## Tech Stack
@@ -31,12 +30,9 @@ Python
 Pandas
 Scikit-learn
 PyTorch
-Streamlit dashboard
 ```
 ## Results Summarized
-* Accuracy:
-* AUC:
-* Weighted F1 Score:
+* Accuracy: 88%
 See notebooks/exploration.ipynb for more details.
 
 ## Citations
