@@ -34,13 +34,16 @@ def preprocess_data(test_size = 0.2, random_state=42):
 
     # scale numeric features
     numeric_cols = ["age", "heart_rate", "systolic_blood_pressure", "oxygen_saturation",
-                    "body_temperature", "pain_level", "chronic_diease_count", "previous_er_visits"]
+                    "body_temperature", "pain_level", "chronic_disease_count", "previous_er_visits"]
     scaler = StandardScaler()
     X[numeric_cols] = scaler.fit_transform(X[numeric_cols])
 
     # train/test split
-    X_train, X_Test, y_train, y_test = train_test_split(X, y, test_size=test_size, 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, 
                                                         random_state=random_state)
 
-    return X_train, X_Test, y_train, y_test
-    
+    # Convert boolean columns to float so PyTorch can handle them
+    X_train = X_train.astype(float)
+    X_test = X_test.astype(float)
+
+    return X_train, X_test, y_train, y_test

@@ -1,9 +1,12 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+from pathlib import Path
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from preprocess import preprocess_data
 from sklearn.metrics import classification_report
-import pickle
 
 # load preprocessed data
 X_train, X_test, y_train, y_test = preprocess_data()
@@ -17,13 +20,13 @@ y_test_tensor = torch.tensor(y_test, dtype=torch.long)
 
 # define neural network
 class TriageNN(nn.Module):
-    def __init__(self, input_size, hidden_size=32, num_classes=3):
+    def __init__(self, input_size, hidden_size=32, num_classes=3):  # default 3
         super(TriageNN, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu1 = nn.ReLU()
         self.fc2 = nn.Linear(hidden_size, hidden_size)
         self.relu2 = nn.ReLU()
-        self.fc3 = nn.Linear(hidden_size, num_classes)
+        self.fc3 = nn.Linear(hidden_size, num_classes)  # num_classes neurons
     
     def forward(self, x):
         x = self.fc1(x)
@@ -33,9 +36,10 @@ class TriageNN(nn.Module):
         x = self.fc3(x)
         return x
 
-input_size = X_train.shape[1] # number of features
 # initialize model, neural network instance
-model = TriageNN(input_size)
+input_size = X_train.shape[1] # number of features
+num_classes = len(set(y_train))  # counts unique labels
+model = TriageNN(input_size, hidden_size=32, num_classes=num_classes)
 
 # define loss and optimizer
 criterion = nn.CrossEntropyLoss()
@@ -64,4 +68,5 @@ with torch.no_grad():
     print(classification_report(y_test_tensor, y_pred_classes))
 
 # save model - save only the weights
-torch.save(model.state_dict(), "../models/triage_nn_model.pth")
+model_path = Path(__file__).resolve().parent.parent / "models" / "triage_nn_model.pth"
+torch.save(model.state_dict(), model_path)
