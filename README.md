@@ -32,7 +32,6 @@ Scikit-learn
 PyTorch
 ```
 ## Results Summarized
-* Accuracy: 88%
 See notebooks/exploration.ipynb for more details.
 
 ## Citations
